@@ -1,5 +1,10 @@
 package model;
 
+import model.MapDirection;
+import model.Livings;
+import model.WorldMap;
+import model.Vector2d;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +13,12 @@ public class Animal implements Livings {
     private Vector2d position;
     private List<Integer> genes = new ArrayList<>();
     private int energyLevel;
+    private int activeGenom;
+    private int eatenPlants = 0;
+    private int children = 0;
+    private int descendant = 0;
+    private int livedDays = 0;
+    private int dayOfDeath;
 
     public Animal(MapDirection direction, Vector2d position, List<Integer> genes, int energyLevel) {
         this.direction = direction;
@@ -33,16 +44,24 @@ public class Animal implements Livings {
         return this.energyLevel;
     }
 
+    public int getChildren() {
+        return this.children;
+    }
+
+    public int getDescendant() {
+        return this.descendant;
+    }
+
+    public int getLiveDays() {
+        return this.livedDays;
+    }
+
+    public int getDayOfDeath() {
+        return this.dayOfDeath;
+    }
+
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
-    }
-
-    public void eat(int plantEnergy) {
-        energyLevel += plantEnergy;
-    }
-
-    public void coopulate(int energyLoss) {
-        energyLevel -= energyLoss;
     }
 
     public void move(MapDirection direction, WorldMap map) {
