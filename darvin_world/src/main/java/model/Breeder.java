@@ -1,11 +1,20 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-public class Breed {
+public class Breeder {
+    private final int minToBreed;
+
+    public Breeder(int minToBreed) {
+        this.minToBreed = minToBreed;
+    }
+
+    public Breeder() {
+        this.minToBreed = 100;
+    }
+
     public Animal breed(Animal animal1, Animal animal2) {
         return new Animal(animal1.getPosition(), createGenome(animal1, animal2), splitEnergy(animal1, animal2));
     }
@@ -36,5 +45,9 @@ public class Breed {
         descendant += energyLoss;
         animal2.setEnergyLevel(animal2.getEnergyLevel() - energyLoss);
         return descendant;
+    }
+
+    public boolean canBreed(Animal animal1, Animal animal2) {
+        return animal1.getEnergyLevel() >= minToBreed && animal2.getEnergyLevel() >= minToBreed;
     }
 }

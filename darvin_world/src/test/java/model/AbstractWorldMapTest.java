@@ -43,7 +43,7 @@ class AbstractWorldMapTest {
     @Test
     public void testMove(){
         WorldMap map = new AbstractWorldMap(10, 5);
-        Animal animal1 = new Animal(MapDirection.SOUTH, new Vector2d(0,0), List.of(1,1), 100);
+        Animal animal1 = new Animal(MapDirection.NORTH, new Vector2d(0,0), List.of(1,1), 100);
         Animal animal2 = new Animal(MapDirection.SOUTH, new Vector2d(2,3), List.of(1,1), 100);
         try {
             map.place(animal1);
@@ -55,8 +55,9 @@ class AbstractWorldMapTest {
         map.move(animal1, MapDirection.SOUTH);
         map.move(animal2, MapDirection.SOUTH);
 
-        assertEquals(new Vector2d(5, 9), animal1.getPosition());
+        assertEquals(new Vector2d(0, 9), animal1.getPosition());
         assertEquals(new Vector2d(2,2), animal2.getPosition());
+        assertEquals(0, animal1.getEnergyLevel());
     }
 
 
@@ -84,8 +85,8 @@ class AbstractWorldMapTest {
         }catch (IncorrectPositionException e){
             fail("unexpected exception: " + e.getMessage());
         }
-        assertEquals(animal1, map.objectAt(new Vector2d(0, 0)));
-        assertEquals(animal2, map.objectAt(new Vector2d(2, 3)));
+        assertEquals(List.of(animal1), map.objectAt(new Vector2d(0, 0)));
+        assertEquals(List.of(animal2), map.objectAt(new Vector2d(2, 3)));
     }
   
 }
