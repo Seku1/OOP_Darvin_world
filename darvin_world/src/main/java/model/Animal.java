@@ -1,10 +1,5 @@
 package model;
 
-import model.MapDirection;
-import model.Livings;
-import model.WorldMap;
-import model.Vector2d;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +27,21 @@ public class Animal implements Livings {
         this.position = position;
         this.energyLevel = energyLevel;
         this.genes.addAll(genes);
+    }
+
+    public Animal(int energyLevel, int livedDays) {
+        this.energyLevel = energyLevel;
+        this.livedDays = livedDays;
+    }
+
+    public Animal(int energyLevel) {
+        this.energyLevel = energyLevel;
+    }
+
+    public Animal(int energyLevel, int livedDays, int children) {
+        this.energyLevel = energyLevel;
+        this.livedDays = livedDays;
+        this.children = children;
     }
 
     @Override
@@ -73,6 +83,10 @@ public class Animal implements Livings {
 
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
+    }
+
+    public void addEnergy(int amount) {
+        this.energyLevel += amount;
     }
 
     public void move(MapDirection direction, WorldMap map) {
