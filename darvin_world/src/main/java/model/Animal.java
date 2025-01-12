@@ -27,6 +27,13 @@ public class Animal implements Livings {
         this.genes.addAll(genes);
     }
 
+    public Animal(Vector2d position, List<Integer> genes, int energyLevel) {
+        this.direction = MapDirection.NORTH;
+        this.position = position;
+        this.energyLevel = energyLevel;
+        this.genes.addAll(genes);
+    }
+
     @Override
     public Vector2d getPosition() {
         return this.position;
@@ -42,6 +49,10 @@ public class Animal implements Livings {
 
     public int getEnergyLevel() {
         return this.energyLevel;
+    }
+
+    public void setEnergyLevel(int energyLevel) {
+        this.energyLevel = energyLevel;
     }
 
     public int getChildren() {
