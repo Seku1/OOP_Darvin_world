@@ -5,6 +5,7 @@ import model.util.IncorrectPositionException;
 import model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
@@ -13,12 +14,10 @@ public class AbstractWorldMap implements WorldMap {
     private final int width;
     protected Vector2d lowerLeft = new Vector2d(0, 0);
     protected Vector2d upperRight;
-    protected Vector2d upperBound;
-    protected Vector2d lowerBound = new Vector2d(0, 0);
-    protected final Map<Vector2d, Animal> animals = new HashMap<>();
     protected final MapVisualizer visualizer = new MapVisualizer(this);
     protected final List<MapChangeListener> observers = new ArrayList<>();
-    private final Map<Vector2d, ArrayList<Animal>> animals1 = new HashMap<>();
+    private final Map<Vector2d, ArrayList<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, Plant> plants = new HashMap<>();
 
     public AbstractWorldMap(int height, int width, int cost) {
         this.upperRight = new Vector2d(width, height);
@@ -51,49 +50,101 @@ public class AbstractWorldMap implements WorldMap {
         }
     }
 
-    private void Insertion(Animal animal, ArrayList<Animal> animals) {
+    @Override
+    public void Insertion(Animal animal, ArrayList<Animal> animals) {
+        if (animals.isEmpty()) {
+            animals.add(animal);
+            return;
+        }
         int i = 0;
-        while (animal.getEnergyLevel() < animals.get(i).getEnergyLevel()) {
+        while (i < animals.size() && animal.getEnergyLevel() < animals.get(i).getEnergyLevel()) {
             i++;
         }
         animals.add(i, animal);
     }
 
     @Override
+    public void addPlant(Vector2d position, Plant plant) {
+        plants.put(position, plant);
+        notifyObservers("Plant added at: " + position);
+    }
+
+    @Override
+    public void removePlant(Vector2d position) {
+        if (plants.containsKey(position)) {
+            plants.remove(position);
+            notifyObservers("Plant removed from: " + position);
+        }
+    }
+
+    @Override
     public boolean place(Animal animal) throws IncorrectPositionException {
-        if (canMoveTo(animal.getPosition())) {
-            Insertion(animal,animals1.get(animal.getPosition()));
-            notifyObservers("Animal placed: " + animal.getPosition());
+        Vector2d position = animal.getPosition();
+        if (canMoveTo(position)) {
+            animals.putIfAbsent(position, new ArrayList<>());
+            Insertion(animal, animals.get(position));
+            notifyObservers("Animal placed: " + position);
             return true;
         }
-        throw new IncorrectPositionException(animal.getPosition());
+        throw new IncorrectPositionException(position);
     }
 
     @Override
     public void move(Animal animal, MapDirection direction) {
         Vector2d oldPosition = animal.getPosition();
+        Vector2d newPosition = newPosition(oldPosition.add(direction.toUnitVector()));
+        if (animals.containsKey(oldPosition)) {
+            animals.get(oldPosition).remove(animal);
+            if (animals.get(oldPosition).isEmpty()) {
+                animals.remove(oldPosition);
+            }
+        }
+        animals.putIfAbsent(newPosition, new ArrayList<>());
+        Insertion(animal, animals.get(newPosition));
         animal.move(direction, this);
-        animals.remove(oldPosition);
-        animals.put(animal.getPosition(), animal);
-        notifyObservers("Animal moved to: " + animal.getPosition() + " from: " + oldPosition);
+        notifyObservers("Animal moved to: " + newPosition + " from: " + oldPosition);
+    }
+
+
+    @Override
+    public Vector2d newPosition(Vector2d position) {
+        int x = (position.getX() + width) % width;
+        int y = (position.getY() + height) % height;
+        return new Vector2d(x, y);
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return objectAt(position) != null;
+        return animals.containsKey(position) && !animals.get(position).isEmpty();
     }
 
     @Override
-    public Livings objectAt(Vector2d position) {
+    public ArrayList<Animal> objectAt(Vector2d position) {
         return animals.get(position);
     }
 
     @Override
     public List<Livings> getElements() {
-        List<Livings> elements = new ArrayList<>(animals.values());
-        // Add other elements if needed
+        List<Livings> elements = animals.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        elements.addAll(plants.values()); // Dodanie roślin
         return elements;
     }
+
+    @Override
+    public List<Animal> getAnimals() {
+        return animals.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Plant> getPlants() {
+        return new ArrayList<>(plants.values());
+    }
+
 
     @Override
     public Boundary getCurrentBounds() {
@@ -102,15 +153,7 @@ public class AbstractWorldMap implements WorldMap {
 
     @Override
     public UUID getID() {
-        return null;
-    }
-
-    @Override
-    public Vector2d newPosition(Vector2d position) {
-        if (!position.follows(this.lowerLeft) || !position.precedes(this.upperRight)) {
-            position = new Vector2d(position.getX() % width, position.getY() % height);
-        }
-        return position;
+        return id;
     }
 
     @Override
