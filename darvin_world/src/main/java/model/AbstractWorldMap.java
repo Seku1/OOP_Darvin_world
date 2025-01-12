@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 public class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
     protected final int cost;
-    private final int height;
-    private final int width;
+    protected final int height;
+    protected final int width;
     protected Vector2d lowerLeft = new Vector2d(0, 0);
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
@@ -102,6 +102,7 @@ public class AbstractWorldMap implements WorldMap {
         animals.putIfAbsent(newPosition, new ArrayList<>());
         Insertion(animal, animals.get(newPosition));
         animal.move(direction, this);
+        animal.setEnergyLevel(animal.getEnergyLevel() - cost);
         notifyObservers("Animal moved to: " + newPosition + " from: " + oldPosition);
     }
 
