@@ -109,8 +109,8 @@ public class AbstractWorldMap implements WorldMap {
 
     @Override
     public Vector2d newPosition(Vector2d position) {
-        int x = (position.getX() + width) % width;
-        int y = (position.getY() + height) % height;
+        int x = (position.getX() + width + 1) % (width + 1);
+        int y = (position.getY() + height + 1) % (height + 1);
         return new Vector2d(x, y);
     }
 

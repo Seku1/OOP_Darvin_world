@@ -55,7 +55,7 @@ class AbstractWorldMapTest {
         map.move(animal1, MapDirection.SOUTH);
         map.move(animal2, MapDirection.SOUTH);
 
-        assertEquals(new Vector2d(0, 9), animal1.getPosition());
+        assertEquals(new Vector2d(0, 10), animal1.getPosition());
         assertEquals(new Vector2d(2,2), animal2.getPosition());
         assertEquals(0, animal1.getEnergyLevel());
     }

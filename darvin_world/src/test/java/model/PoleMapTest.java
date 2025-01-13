@@ -8,7 +8,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PoleMapTest {
-
     @Test
     void moveTestEquatorEven() {
         Animal animal = new Animal(MapDirection.SOUTH, new Vector2d(2,5), List.of(1,1), 100);
@@ -52,8 +51,8 @@ class PoleMapTest {
             throw new RuntimeException(e);
         }
 
-        map.move(animal, MapDirection.EAST);
-        map.move(animal1, MapDirection.EAST);
+        map.move(animal, MapDirection.NORTH);
+        map.move(animal1, MapDirection.SOUTH);
 
         assertEquals(animal.getEnergyLevel(), 0);
         assertEquals(animal1.getEnergyLevel(), 0);
