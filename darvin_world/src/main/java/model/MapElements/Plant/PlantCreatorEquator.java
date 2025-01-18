@@ -2,12 +2,10 @@ package model.MapElements.Plant;
 
 import model.Maps.AbstractWorldMap;
 import model.Others.Vector2d;
-import model.Util.RandomPositionGenerator;
 import java.util.Optional;
 import java.util.Random;
 
 public class PlantCreatorEquator extends AbstractPlantCreator {
-    protected RandomPositionGenerator positionGenerator;
     private final Random random = new Random();
 
     public PlantCreatorEquator(AbstractWorldMap map) {
@@ -20,7 +18,7 @@ public class PlantCreatorEquator extends AbstractPlantCreator {
             if (position.isPresent()) {
                 Plant plant = createPlant(position.get());
                 map.addPlant(position.get(), plant);
-                positionGenerator.removePosition(position.get());
+                positionGenerator.removePosition(position.get()); // Używanie positionGenerator z klasy bazowej
             } else {
                 break;
             }
@@ -52,8 +50,9 @@ public class PlantCreatorEquator extends AbstractPlantCreator {
             preferredPosition = position;
             break;
         }
+
         if (preferredPosition == null) {
-            return positionGenerator.getRandomFreePosition();
+            return positionGenerator.getRandomFreePosition(); // Jeśli nie ma preferowanej pozycji, używamy generatora
         } else {
             return Optional.of(preferredPosition);
         }

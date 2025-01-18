@@ -5,16 +5,12 @@ import model.Others.MapDirection;
 import model.Others.Vector2d;
 
 public class RegularAnimalCreator extends AbstractAnimalCreator {
-    int genomeSize;
-    int energyLevel;
-    public RegularAnimalCreator(AbstractWorldMap map, int genomeSize, int energyLevel) {
-        super(map);
-        this.genomeSize = genomeSize;
-        this.energyLevel = energyLevel;
+    public RegularAnimalCreator(AbstractWorldMap map, int startingAnimalEnergy, int genomeSize) {
+        super(map, startingAnimalEnergy, genomeSize);
     }
 
     @Override
     public Animal createAnimal(Vector2d position) {
-        return new RegularAnimal(MapDirection.NORTH,position,generateRandomGenes(genomeSize),energyLevel);
+        return new RegularAnimal(MapDirection.NORTH,position,generateRandomGenes(genomeSize),animalStartingEnergy);
     }
 }

@@ -9,12 +9,16 @@ import java.util.Random;
 
 public abstract class AbstractAnimalCreator implements AnimalCreator {
     protected final AbstractWorldMap map;
+    protected final int animalStartingEnergy;
+    protected final int genomeSize;
     private final RandomPositionGenerator positionGenerator;
     protected final Random random = new Random();
 
-    protected AbstractAnimalCreator(AbstractWorldMap map) {
+    protected AbstractAnimalCreator(AbstractWorldMap map, int animalStartingEnergy, int genomeSize) {
         this.map = map;
         this.positionGenerator = new RandomPositionGenerator(map);
+        this.animalStartingEnergy = animalStartingEnergy;
+        this.genomeSize = genomeSize;
     }
 
     private void addAnimals(int animalCount) {

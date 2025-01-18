@@ -10,7 +10,7 @@ import model.Util.IncorrectPositionException;
 
 import java.util.*;
 
-public interface WorldMap extends MoveValidator {
+public interface WorldMap {
     boolean place(Animal animal) throws IncorrectPositionException;
     void move(Animal animal, MapDirection direction);
     boolean isOccupied(Vector2d position);
@@ -19,10 +19,13 @@ public interface WorldMap extends MoveValidator {
     Boundary getCurrentBounds();
     String toString();
     UUID getID();
-    public void insertAnimal(Vector2d position, Animal animal);
+    void insertAnimal(Vector2d position, Animal animal);
     void addPlant(Vector2d position, Plant plant);
     void removePlant(Vector2d position);
     List<Animal> getAnimals();
     Map<Vector2d, Plant> getPlantMap();
     int getHight();
+    void removeDeadAnimals();
+    List<Vector2d> getAnimalPositions();
+    List<Animal> getAnimalsAtPosition(Vector2d position);
 }

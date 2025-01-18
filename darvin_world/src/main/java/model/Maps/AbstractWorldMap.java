@@ -12,7 +12,7 @@ import model.Util.MapVisualizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractWorldMap implements WorldMap {
+public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     protected final UUID id = UUID.randomUUID();
     protected final int cost;
     protected final int height;
@@ -46,7 +46,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         observers.remove(observer);
     }
 
-    protected void notifyObservers(String message) {
+    public void notifyObservers(String message) {
 
         synchronized (observers) {
             for (MapChangeListener observer : observers) {
@@ -63,6 +63,30 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .thenComparingInt(Animal::getLiveDays).reversed()
                 .thenComparingInt(Animal::getChildren).reversed());
     }
+
+    @Override
+    public void removeDeadAnimals() {
+        List<Vector2d> positionsToRemove = new ArrayList<>();
+        for (Map.Entry<Vector2d, ArrayList<Animal>> entry : animals.entrySet()) {
+            Vector2d position = entry.getKey();
+            ArrayList<Animal> animalList = entry.getValue();
+            for (int i = animalList.size() - 1; i >= 0; i--) {
+                if (animalList.get(i).getEnergyLevel() <= 0) {
+                    animalList.remove(i);
+                } else {
+                    break;
+                }
+            }
+            if (animalList.isEmpty()) {
+                positionsToRemove.add(position);
+            }
+        }
+        for (Vector2d position : positionsToRemove) {
+            animals.remove(position);
+        }
+        notifyObservers("Dead animals removed from the map");
+    }
+
 
 
     @Override
@@ -194,4 +218,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
         return Optional.empty();
     }
+
+    @Override
+    public List<Vector2d> getAnimalPositions() {
+        return animals.keySet().stream()
+                .filter(position -> !animals.get(position).isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Animal> getAnimalsAtPosition(Vector2d position) {
+        return animals.getOrDefault(position, new ArrayList<>());
+    }
+
 }

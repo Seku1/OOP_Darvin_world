@@ -124,4 +124,8 @@ public abstract class Animal implements MapElement {
             position = potential_new_position;
         }
     }
+
+    public String toString() {
+        return "*";
+    }
 }

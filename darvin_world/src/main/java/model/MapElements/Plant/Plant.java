@@ -17,7 +17,7 @@ public class Plant implements MapElement {
 
     @Override
     public String toString() {
-        return "*";
+        return "#";
     }
 
     public String getName() {
