@@ -28,4 +28,6 @@ public interface WorldMap {
     void removeDeadAnimals();
     List<Vector2d> getAnimalPositions();
     List<Animal> getAnimalsAtPosition(Vector2d position);
+    boolean isPlantAt(Vector2d position);
+    Plant getPlantAt(Vector2d position);
 }

@@ -74,12 +74,18 @@ public class MapVisualizer {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
-            if (object != null) {
-                return object.toString();
-            }
+        // Check if there are animals at the position
+        if (this.map.getAnimalsAtPosition(currentPosition).size() > 0) {
+            // Display the first animal in the list
+            return this.map.getAnimalsAtPosition(currentPosition).get(0).toString();
         }
+        // Check if there is a plant at the position
+        if (this.map.isPlantAt(currentPosition)) {
+            // Display the plant
+            return this.map.getPlantAt(currentPosition).toString();
+        }
+        // Empty cell if neither animals nor plants are present
         return EMPTY_CELL;
     }
+
 }

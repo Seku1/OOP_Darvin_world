@@ -231,4 +231,12 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
         return animals.getOrDefault(position, new ArrayList<>());
     }
 
+    public boolean isPlantAt(Vector2d position) {
+        return plants.containsKey(position);
+    }
+
+    public Plant getPlantAt(Vector2d position) {
+        return plants.get(position);
+    }
+
 }

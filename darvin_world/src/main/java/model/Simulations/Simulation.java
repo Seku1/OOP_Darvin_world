@@ -5,6 +5,9 @@ import model.MapElements.Animal.Animal;
 import model.MapElements.Plant.AbstractPlantCreator;
 import model.MapElements.Animal.AbstractAnimalCreator;
 import model.Maps.AbstractWorldMap;
+import model.Others.Vector2d;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation implements Runnable {
@@ -62,11 +65,11 @@ public class Simulation implements Runnable {
     }
 
     private void runDay() {
-        map.removeDeadAnimals(); // Remove animals with zero energy
-        moveAnimals();          // Move all animals
-        feedAnimals();          // Animals eat plants
-        breedAnimals();         // Animals breed
-        plantCreator.addPlantsDaily(5); // Grow new plants daily
+        map.removeDeadAnimals();
+        moveAnimals();
+        feedAnimals();
+        breedAnimals();
+        plantCreator.addPlantsDaily(5);
     }
 
     private void moveAnimals() {
@@ -76,14 +79,20 @@ public class Simulation implements Runnable {
     }
 
     private void feedAnimals() {
+        List<Vector2d> plantsToRemove = new ArrayList<>();
         map.getPlantMap().forEach((position, plant) -> {
             List<Animal> animalsAtPosition = map.getAnimalsAtPosition(position);
             if (!animalsAtPosition.isEmpty()) {
                 animalsAtPosition.get(0).addEnergy(energyPerPlant);
-                map.removePlant(position); // Remove plant after it's eaten
+                plantsToRemove.add(position);
             }
         });
+
+        for (Vector2d position : plantsToRemove) {
+            map.removePlant(position);
+        }
     }
+
 
     private void breedAnimals() {
         map.getAnimalPositions().forEach(position -> {

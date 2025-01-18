@@ -1,6 +1,7 @@
 package model.MapElements.Animal;
 
 import model.MapElements.MapElement;
+import model.Maps.AbstractWorldMap;
 import model.Others.MapDirection;
 import model.Others.Vector2d;
 import model.Maps.WorldMap;
@@ -118,7 +119,7 @@ public abstract class Animal implements MapElement {
         return this.energyLevel <= 0;
     }
 
-    public void move(MapDirection direction, WorldMap map) {
+    public void move(MapDirection direction, AbstractWorldMap map) {
         Vector2d potential_new_position = this.position.add(this.direction.toUnitVector());
         if(map.canMoveTo(potential_new_position)) {
             position = potential_new_position;

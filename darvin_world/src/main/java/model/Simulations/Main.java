@@ -2,31 +2,27 @@ package model.Simulations;
 
 import model.MapElements.Plant.PlantCreatorEquator;
 import model.Maps.AbstractWorldMap;
-import model.MapElements.Animal.RegularAnimalCreator; // Implementacja tworzenia zwierząt
-import model.MapElements.Plant.AbstractPlantCreator; // Implementacja tworzenia roślin
+import model.MapElements.Animal.RegularAnimalCreator;
+import model.MapElements.Plant.AbstractPlantCreator;
 import model.Activities.Breeder;
 import model.Activities.Eating;
 import model.Maps.GlobeMap;
 
 public class Main {
     public static void main(String[] args) {
-        // Parametry mapy
         int mapHeight = 10;
         int mapWidth = 10;
         int animalCost = 1;
-
-        // Parametry symulacji
-        int startingAnimalCount = 10;
-        int startingPlantCount = 5;
+        int startingAnimalCount = 2;
+        int startingPlantCount = 10;
         int dailyPlantCount = 3;
-        int energyPerPlant = 10;
-        int minEnergyToBreed = 20;
+        int energyPerPlant = 5;
+        int minEnergyToBreed = 100;
 
-        // Tworzenie obiektów mapy i pozostałych elementów
         AbstractWorldMap map = new GlobeMap(mapHeight, mapWidth, animalCost);
         Breeder breeder = new Breeder(minEnergyToBreed);
         Eating eating = new Eating(energyPerPlant);
-        RegularAnimalCreator animalCreator = new RegularAnimalCreator(map,50,7);
+        RegularAnimalCreator animalCreator = new RegularAnimalCreator(map,20,7);
         AbstractPlantCreator plantCreator = new PlantCreatorEquator(map);
 
         // Inicjalizacja symulacji
@@ -49,7 +45,7 @@ public class Main {
 
         // Pozwól symulacji działać przez 10 sekund, następnie zakończ
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

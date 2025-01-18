@@ -1,5 +1,6 @@
 package model.MapElements.Animal;
 
+import model.Maps.AbstractWorldMap;
 import model.Others.MapDirection;
 import model.Others.Vector2d;
 import model.Maps.WorldMap;
@@ -14,7 +15,7 @@ public class OldAnimal extends Animal {
     }
 
     @Override
-    public void move(MapDirection direction, WorldMap map) {
+    public void move(MapDirection direction, AbstractWorldMap map) {
         double chanceToSkip = Math.min(0.8, getLiveDays() * 0.01);
         if (random.nextDouble() < chanceToSkip) {
             return;
