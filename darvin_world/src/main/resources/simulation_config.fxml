@@ -4,6 +4,7 @@
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
@@ -11,5 +12,25 @@
             fx:controller="frontend.prezenter.SimulationPresenter"
             prefHeight="400.0" prefWidth="600.0">
 
+    <center>
+        <LineChart fx:id="lineChart" title="Przykładowy Wykres Liniowy">
+            <xAxis>
+                <NumberAxis fx:id="xAxis" label="Dzień" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" label="Liczba zwierząt" />
+            </yAxis>
+            <data>
+                <XYChart.Series name="Zwierzęta">
+                    <data>
+                    </data>
+                </XYChart.Series>
+                <XYChart.Series name="Rośliny">
+                    <data>
+                    </data>
+                </XYChart.Series>
+            </data>
+        </LineChart>
+    </center>
 
 </BorderPane>

@@ -7,7 +7,6 @@
             minHeight="350.0" minWidth="750.0"
             fx:controller="frontend.prezenter.ConfigurationPrezenter" style="-fx-padding: 15;">
 
-    <!-- Top Section -->
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Dostępne konfiguracje:"/>
@@ -17,7 +16,6 @@
         </HBox>
     </top>
 
-    <!-- Center Section -->
     <center>
         <GridPane hgap="10" vgap="10" style="-fx-padding: 15;">
             <!-- Kolumna 1 -->
@@ -65,6 +63,7 @@
             <ComboBox fx:id="behaviorVariantBox" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
         </GridPane>
     </center>
+
     <bottom>
         <HBox spacing="10" alignment="CENTER">
             <Button text="Start" onAction="#onStart"/>

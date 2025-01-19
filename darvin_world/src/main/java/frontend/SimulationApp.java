@@ -2,6 +2,7 @@ package frontend;
 
 
 import frontend.prezenter.ConfigurationPrezenter;
+import frontend.prezenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +19,7 @@ public class SimulationApp extends Application {
         loader.setLocation(getClass().getClassLoader().getResource("simulation_config.fxml"));
         BorderPane root = loader.load();
 
-        ConfigurationPrezenter presenter = loader.getController();
+        SimulationPresenter presenter = loader.getController();
 
         configureStage(primaryStage, root);
 
