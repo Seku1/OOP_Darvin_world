@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+            minHeight="350.0" minWidth="750.0"
+            fx:controller="frontend.prezenter.ConfigurationPrezenter" style="-fx-padding: 15;">
+
+    <!-- Top Section -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Dostępne konfiguracje:"/>
+            <ComboBox fx:id="configurationComboBox" prefWidth="200" onAction="#onSelectConfiguration"/>
+            <Button text="Zapisz konfigurację" onAction="#onSaveConfiguration"/>
+            <Button text="Usuń konfigurację" onAction="#onDeleteConfiguration"/>
+        </HBox>
+    </top>
+
+    <!-- Center Section -->
+    <center>
+        <GridPane hgap="10" vgap="10" style="-fx-padding: 15;">
+            <!-- Kolumna 1 -->
+            <Label text="Wysokość mapy:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="heightField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Szerokość mapy:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="widthField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Wariant mapy:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="mapVariantBox" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Startowa liczba roślin:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="initialPlantCountField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Energia z jednej rośliny:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <TextField fx:id="plantEnergyField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <Label text="Liczba roślin wyrastających dziennie:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <TextField fx:id="dailyPlantGrowthField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <!-- Kolumna 2 -->
+            <Label text="Startowa liczba zwierząt:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+            <TextField fx:id="initialAnimalCountField" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+            <Label text="Startowa energia zwierząt:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+            <TextField fx:id="initialAnimalEnergyField" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+            <Label text="Energia dla rozmnażania:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+            <TextField fx:id="energyToReproduceField" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+            <Label text="Energia rodziców dla potomka:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+            <TextField fx:id="energyForChildField" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+            <Label text="Min. liczba mutacji:" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+            <TextField fx:id="minMutationsField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+
+            <Label text="Max. liczba mutacji:" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+            <TextField fx:id="maxMutationsField" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+
+            <Label text="Długość genomu:" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+            <TextField fx:id="genomeLengthField" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+
+            <Label text="Wariant zachowania zwierząt:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="behaviorVariantBox" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+        </GridPane>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Start" onAction="#onStart"/>
+        </HBox>
+    </bottom>
+</BorderPane>
