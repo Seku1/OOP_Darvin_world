@@ -103,7 +103,7 @@ public abstract class Animal implements MapElement {
         return this.activeGenom;
     }
 
-    public int geteEatenPlants() {
+    public int getEatenPlants() {
         return this.eatenPlants;
     }
 

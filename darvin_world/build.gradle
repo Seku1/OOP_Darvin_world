@@ -28,3 +28,4 @@ javafx {
 application {
     mainClass = 'frontend.Start'
 }
+

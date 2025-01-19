@@ -3,13 +3,27 @@ package frontend.prezenter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import model.Activities.Breeder;
+import model.MapElements.Animal.*;
+import model.MapElements.Plant.AbstractPlantCreator;
+import model.MapElements.Plant.PlantCreatorEquator;
+import model.Maps.AbstractWorldMap;
+import model.Maps.GlobeMap;
+import model.Maps.PoleMap;
+import model.Simulations.Simulation;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -152,12 +166,58 @@ public class ConfigurationPrezenter {
     }
 
     public void onStart(ActionEvent actionEvent) {
-        if(validateConfiguration()){
-
-        }else{
+        if(!validateConfiguration()){
             showAlert("Błąd", "Podaj wszystkie parametry!!!");
-
+            return;
         }
+        try {
+            int height = Integer.parseInt(heightField.getText());
+            int width = Integer.parseInt(widthField.getText());
+            int startingAnimalCount = Integer.parseInt(initialAnimalCountField.getText());
+            int startingPlantCount = Integer.parseInt(initialPlantCountField.getText());
+            int energyPerPlant = Integer.parseInt(plantEnergyField.getText());
+            int energyToReproduce = Integer.parseInt(energyToReproduceField.getText());
+            int energyStarting = Integer.parseInt(initialAnimalEnergyField.getText());
+            int genomeLength = Integer.parseInt(genomeLengthField.getText());
+
+            AbstractWorldMap map;
+            if (Objects.equals(mapVariantBox.getValue(), "Bieguny")) {
+                map = new PoleMap(height, width, 100);
+            } else {
+                map = new GlobeMap(height, width, 100);
+            }
+
+            AbstractAnimalCreator animalCreator;
+            if (Objects.equals(behaviorVariantBox.getValue(), "Starość nie radość")) {
+                animalCreator = new OldAnimalCreator(map, energyStarting, genomeLength);
+            } else{
+                animalCreator = new RegularAnimalCreator(map, energyStarting, genomeLength);
+            }
+
+            Breeder breeder = new Breeder(energyToReproduce);
+
+            PlantCreatorEquator plantCreator = new PlantCreatorEquator(map);
+
+            Simulation simulation = new Simulation(
+                    map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant
+            );
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation_config.fxml"));
+            Parent simulationRoot = loader.load();
+
+            SimulationPresenter presenter = loader.getController();
+            presenter.setSimulation(simulation, map);
+
+            Stage stage = new Stage();
+            stage.setTitle("Symulacja");
+            stage.setScene(new Scene(simulationRoot));
+            stage.show();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            showAlert("Błąd", "Nieudało się uruchomić Symulacji");
+        }
+
     }
 
     private boolean validateConfiguration() {

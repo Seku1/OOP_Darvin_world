@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-            minHeight="350.0" minWidth="750.0"
+            minHeight="400.0" minWidth="750.0"
             fx:controller="frontend.prezenter.ConfigurationPrezenter" style="-fx-padding: 15;">
 
     <top>
