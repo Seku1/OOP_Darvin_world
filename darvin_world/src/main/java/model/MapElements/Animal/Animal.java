@@ -19,6 +19,7 @@ public abstract class Animal implements MapElement {
     private int descendant = 0;
     private int livedDays = 0;
     private int dayOfDeath;
+    private boolean dead = false;
 
     public Animal(MapDirection direction, Vector2d position, int [] genes, int energyLevel) {
         this.direction = direction;
@@ -101,6 +102,7 @@ public abstract class Animal implements MapElement {
 
     public void setDayOfDeath(int dayOfDeath) {
         this.dayOfDeath = dayOfDeath;
+        this.dead = true;
     }
 
     public int getActiveGenom() {
@@ -129,4 +131,9 @@ public abstract class Animal implements MapElement {
     public String toString() {
         return "*";
     }
+
+    public boolean isDead() {
+        return this.dead;
+    }
+
 }

@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import model.MapElements.Animal.Animal;
+import model.MapElements.Plant.PlantCreator;
+import model.MapElements.Plant.PlantCreatorEquator;
 import model.Maps.AbstractWorldMap;
 import model.Others.Vector2d;
 import model.Simulations.Simulation;
@@ -30,6 +32,7 @@ public class SimulationPresenter {
             averageEnergyLevel, averageChildCount, animalGenomeLabel, animalActiveGenomeLabel, howMuchEatenLabel,
             animalChildCountLabel, animalAgeLabel, livesLabel, animalDescendantCountLabel;
     public Button additionalButton;
+    public Button drawEquatorButton;
     @FXML
     private LineChart<Number, Number> lineChart;
     @FXML
@@ -45,9 +48,12 @@ public class SimulationPresenter {
     private XYChart.Series<Number, Number> plantSeries = new XYChart.Series<>();
 
     private static final int MAX_DAYS_DISPLAYED = 10;
+    private PlantCreatorEquator plantCreator;
 
     @FXML
     public void initialize() {
+        animalSeries.getData().clear();
+        plantSeries.getData().clear();
         animalSeries.setName("Liczba zwierząt");
         plantSeries.setName("Liczba roślin");
         lineChart.getData().addAll(animalSeries, plantSeries);
@@ -59,8 +65,9 @@ public class SimulationPresenter {
         yAxis.setAutoRanging(true);
     }
 
-    public void setSimulation(Simulation simulation, AbstractWorldMap map) {
+    public void setSimulation(Simulation simulation, AbstractWorldMap map, PlantCreatorEquator plantCreator) {
         this.simulation = simulation;
+        this.plantCreator = plantCreator;
         this.map = map;
         this.map.addObserver((worldMap, message) -> updateView());
         startSimulation();
@@ -86,12 +93,7 @@ public class SimulationPresenter {
             plantSeries.getData().add(new XYChart.Data<>(dayNumber, plantCount));
 
             if (dayNumber > MAX_DAYS_DISPLAYED) {
-                if (animalSeries.getData().size() > 10) {
-                    animalSeries.getData().remove(0);
-                }
-                if (plantSeries.getData().size() > 10) {
-                    plantSeries.getData().remove(0);
-                }
+
                 xAxis.setLowerBound(dayNumber + 1 - MAX_DAYS_DISPLAYED);
                 xAxis.setUpperBound(dayNumber);
 
@@ -111,7 +113,8 @@ public class SimulationPresenter {
         averageEnergyLevel.setText("Ilość dzieci: " + animal.getChildren());
         animalDescendantCountLabel.setText("Ilość potomstwa" + animal.getDescendant());
         animalAgeLabel.setText("Wiek zwierzaka: " + animal.getLiveDays());
-        livesLabel.setText("Status życia: " + (animal.isDead()? "Martwy": "Żywy"));
+        livesLabel.setText("Status życia: " + (animal.isDead()? "Dzień Śmierci: " + animal.getDayOfDeath() : "Żywy"));
+        animalDescendantCountLabel.setText("Ilość potomków: " + animal.getDescendant());
     }
 
     private String formatGenes(int[] genes) {
@@ -127,6 +130,7 @@ public class SimulationPresenter {
         plantCountLabel.setText("Liczba roślin : " + map.getPlants().size());
         emptyCountLabel.setText("Liczba wolnych pól to: " + Math.max(map.getWidth() * map.getHight() - map.getOccupiedPositions().size(), 0));
         updateMostPopularGenomeStats();
+        averageLifespanLabel.setText("Średnia długość życia: " + map.getAverageLifeSpanOfDeadAnimals());
         averageEnergyLevel.setText("Średnii poziom energi zwierzaków: " + map.getAverageEnergyLevel());
         averageChildCount.setText("Średnia ilość dzieci to: " + simulation.getAverageChildCount());
     }
@@ -229,10 +233,12 @@ public class SimulationPresenter {
                 simulation.pause();
                 pausePlayButton.setText("Wznów");
                 additionalButton.setVisible(true);
+                drawEquatorButton.setVisible(true);
             } else {
                 simulation.play();
                 pausePlayButton.setText("Pauza");
                 additionalButton.setVisible(false);
+                drawEquatorButton.setVisible(false);
             }
         }
     }
@@ -272,6 +278,25 @@ public class SimulationPresenter {
         }
     }
 
-    
+    @FXML
+    public void handleDrawEquatorAction() {
+        PlantCreatorEquator plantCreator = new PlantCreatorEquator(map);
+        int equatorStart = plantCreator.getEquatorStart();
+        int equatorEnd = plantCreator.getEquatorEnd();
 
+        GraphicsContext gc = mapCanvas.getGraphicsContext2D();
+
+        double cellWidth = mapCanvas.getWidth() / (map.getWidth() + 1);
+        double cellHeight = mapCanvas.getHeight() / (map.getHight() + 1);
+
+        gc.setFill(Color.YELLOW);
+
+        for (int y = equatorStart; y <= equatorEnd; y++) {
+            for (int x = map.getLowerLeft().getX(); x <= map.getUpperRight().getX(); x++) {
+                double xPos = x * cellWidth;
+                double yPos = y * cellHeight;
+                gc.fillRect(xPos, yPos, cellWidth, cellHeight);
+            }
+        }
+    }
 }

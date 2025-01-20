@@ -230,7 +230,7 @@ public class ConfigurationPrezenter {
             Parent simulationRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            presenter.setSimulation(simulation, map);
+            presenter.setSimulation(simulation, map, plantCreator);
 
             Stage stage = new Stage();
             stage.setTitle("Symulacja");
