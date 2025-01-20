@@ -15,7 +15,7 @@ public class GlobeMap extends AbstractWorldMap {
     public void move(Animal animal, MapDirection direction) {
         Vector2d oldPosition = animal.getPosition();
         animal.setNewDirection(animal.getActiveGenom());
-        Vector2d newPosition = oldPosition.addOnTheGlobe(direction.toUnitVector(), width);
+        Vector2d newPosition = oldPosition.addOnTheGlobe(direction.toUnitVector(), width + 1);
         moveHelper(animal, direction, oldPosition, newPosition);
     }
 }

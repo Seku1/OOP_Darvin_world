@@ -9,11 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Activities.Breeder;
 import model.MapElements.Animal.*;
-import model.MapElements.Plant.AbstractPlantCreator;
 import model.MapElements.Plant.PlantCreatorEquator;
 import model.Maps.AbstractWorldMap;
 import model.Maps.GlobeMap;
@@ -179,6 +177,18 @@ public class ConfigurationPrezenter {
             int energyToReproduce = Integer.parseInt(energyToReproduceField.getText());
             int energyStarting = Integer.parseInt(initialAnimalEnergyField.getText());
             int genomeLength = Integer.parseInt(genomeLengthField.getText());
+            int dailyPlantGrowth = Integer.parseInt(dailyPlantGrowthField.getText());
+            int maxMutations = Integer.parseInt(maxMutationsField.getText());
+            int minMutations = Integer.parseInt(minMutationsField.getText());
+
+            if (width * height < startingAnimalCount || height * width < startingPlantCount) {
+                showAlert("Błąd", "Większa startowa liczba zwierząt/roślin niż wielkość planszy!!!");
+                return;
+            }
+            if (genomeLength < 1 || genomeLength < maxMutations || minMutations > maxMutations) {
+                showAlert("Błąd", "Nieprawidłowe ustawienia genów");
+                return;
+            }
 
             AbstractWorldMap map;
             if (Objects.equals(mapVariantBox.getValue(), "Bieguny")) {
@@ -199,7 +209,7 @@ public class ConfigurationPrezenter {
             PlantCreatorEquator plantCreator = new PlantCreatorEquator(map);
 
             Simulation simulation = new Simulation(
-                    map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant
+                    map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant, dailyPlantGrowth
             );
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation_config.fxml"));

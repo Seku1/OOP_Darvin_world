@@ -33,7 +33,8 @@ public class Main {
                 animalCreator,
                 startingAnimalCount,
                 startingPlantCount,
-                energyPerPlant
+                energyPerPlant,
+                5
         );
 
         // Wyświetlenie stanu początkowego

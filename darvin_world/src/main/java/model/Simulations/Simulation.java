@@ -20,9 +20,14 @@ public class Simulation implements Runnable {
     private final int energyPerPlant;
     private int dayNumber = 0;
     private boolean running = true;
-    private int threadSleepTime = 700;
+    private final int dailyPlantGrowth;
+    private static int childCount = 0;
 
-    public Simulation(AbstractWorldMap map, AbstractPlantCreator plantCreator, Breeder breeding, AbstractAnimalCreator animalCreator, int startingAnimalCount, int startingPlantCount, int energyPerPlant) {
+    public Simulation(
+            AbstractWorldMap map, AbstractPlantCreator plantCreator, Breeder breeding,
+            AbstractAnimalCreator animalCreator, int startingAnimalCount, int startingPlantCount,
+            int energyPerPlant, int dailyPlantGrowth
+    ) {
         this.map = map;
         this.plantCreator = plantCreator;
         this.animalCreator = animalCreator;
@@ -30,6 +35,7 @@ public class Simulation implements Runnable {
         this.startingAnimalCount = startingAnimalCount;
         this.startingPlantCount = startingPlantCount;
         this.energyPerPlant = energyPerPlant;
+        this.dailyPlantGrowth = dailyPlantGrowth;
         initializeMap();
     }
 
@@ -40,25 +46,33 @@ public class Simulation implements Runnable {
 
     public void pause() {
         running = false;
+        synchronized (this) {
+            notify();
+        }
     }
 
     public void play() {
         running = true;
-    }
-
-    public void setThreadSleep(int time) {
-        threadSleepTime = time;
+        synchronized (this) {
+            notify();
+        }
     }
 
     @Override
     public void run() {
         try {
-            while (!map.getAnimals().isEmpty() && running) {
+            while (!map.getAnimals().isEmpty()) {
+                synchronized (this) {
+                    while (!running) {
+                        wait();
+                        Thread.sleep(500);
+                    }
+                }
+                int threadSleepTime = 700;
                 Thread.sleep(threadSleepTime);
                 dayNumber++;
                 runDay();
                 map.notifyObservers("Day " + dayNumber);
-                System.out.println("Day " + dayNumber);
             }
         } catch (InterruptedException exception) {
             exception.printStackTrace();
@@ -71,7 +85,7 @@ public class Simulation implements Runnable {
             moveAnimals();
             feedAnimals();
             breedAnimals();
-            plantCreator.addPlantsDaily(100);
+            plantCreator.addPlantsDaily(this.dailyPlantGrowth);
         }
     }
 
@@ -106,6 +120,7 @@ public class Simulation implements Runnable {
                 if (breeding.canBreed(parent1, parent2)) {
                     Animal child = breeding.breed(parent1, parent2);
                     map.insertAnimal(position, child); // Add new animal to the map
+                    childCount++;
                 }
             }
         });
@@ -113,5 +128,13 @@ public class Simulation implements Runnable {
 
     public int getDayNumber() {
         return dayNumber;
+    }
+
+    public boolean getRunning(){
+        return running;
+    }
+
+    public double getAverageChildCount(){
+        return (double) 2 * childCount/(startingAnimalCount+childCount);
     }
 }

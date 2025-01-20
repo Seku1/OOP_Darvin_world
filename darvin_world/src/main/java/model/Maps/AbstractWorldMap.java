@@ -11,6 +11,7 @@ import model.Util.IncorrectPositionException;
 import model.Util.MapVisualizer;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     protected final UUID id = UUID.randomUUID();
@@ -161,7 +162,7 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        elements.addAll(plants.values()); // Dodanie roślin
+        elements.addAll(plants.values());
         return elements;
     }
 
@@ -241,5 +242,16 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
 
     public List<Plant> getPlants() {
         return new ArrayList<>(plants.values());
+    }
+
+    public List<Vector2d> getOccupiedPositions(){
+        return Stream.concat(
+                animals.keySet().stream().filter(position -> objectAt(position).isPresent()),
+                plants.keySet().stream()
+        ).distinct().collect(Collectors.toList());
+    }
+
+    public double getAverageEnergyLevel() {
+        return getAnimals().stream().mapToDouble(Animal::getEnergyLevel).average().orElse(0.0);
     }
 }
