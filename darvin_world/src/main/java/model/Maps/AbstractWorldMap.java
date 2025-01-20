@@ -1,5 +1,7 @@
 package model.Maps;
 
+import model.Genes.GeneMutator;
+import model.Genes.RegularMutation;
 import model.Others.MapChangeListener;
 import model.Others.MapDirection;
 import model.MapElements.Animal.Animal;
@@ -57,6 +59,29 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     public void setMostPopularGenomes() {
         this.most_popular_genomes = findMostPopularGenomes();
     }
+
+    public void mutateAllGenes(GeneMutator mutator) {
+        for (ArrayList<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                mutator.mutate(animal.getGenes());
+            }
+        }
+        notifyObservers("All animal genes have been mutated.");
+    }
+
+    public void mutateAnimals() {
+        int minimumNumberOfMutations = 0;
+        Animal randomAnimal = animals.values().stream()
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.get(0))
+                .findFirst()
+                .orElse(null);
+        int maximumNumberOfMutations = randomAnimal.getGenes().length;
+        int maxValue = 7;
+        GeneMutator geneMutator = new RegularMutation(minimumNumberOfMutations,maximumNumberOfMutations,maxValue);
+        mutateAllGenes(geneMutator);
+    }
+
 
     public AbstractWorldMap(int height, int width) {
         this.upperRight = new Vector2d(width, height);
