@@ -111,6 +111,10 @@ public abstract class Animal implements MapElement {
         return this.eatenPlants;
     }
 
+    public void incrementEatenPlants() {
+        this.eatenPlants++;
+    }
+
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
     }

@@ -103,6 +103,7 @@ public class Simulation implements Runnable {
             List<Animal> animalsAtPosition = map.getAnimalsAtPosition(position);
             if (!animalsAtPosition.isEmpty()) {
                 animalsAtPosition.get(0).addEnergy(energyPerPlant);
+                animalsAtPosition.get(0).incrementEatenPlants();
                 plantsToRemove.add(position);
             }
         });
