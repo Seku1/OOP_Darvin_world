@@ -5,7 +5,6 @@ import model.Others.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class PlantCreatorEquator extends AbstractPlantCreator {
@@ -16,9 +15,9 @@ public class PlantCreatorEquator extends AbstractPlantCreator {
     public PlantCreatorEquator(AbstractWorldMap map) {
         super(map);
         int mapHeight = map.getHight();
-        int equatorHeight = (int) Math.ceil(mapHeight * 0.2); // 20% wysokości mapy
-        equatorStart = (mapHeight - equatorHeight) / 2; // Start równika
-        equatorEnd = equatorStart + equatorHeight - 1; // Koniec równika
+        int equatorHeight = (int) Math.ceil(mapHeight * 0.2);
+        equatorStart = (mapHeight - equatorHeight) / 2;
+        equatorEnd = equatorStart + equatorHeight - 1;
     }
 
     @Override
@@ -32,13 +31,9 @@ public class PlantCreatorEquator extends AbstractPlantCreator {
     }
 
     private void addPlants(int plantCount) {
-        int equatorPlantCount = (int) Math.round(plantCount * 0.65); // 65% na równiku
-        int otherPlantCount = plantCount - equatorPlantCount; // Reszta poza równikiem
-
-        // Dodaj rośliny na równiku
+        int equatorPlantCount = (int) Math.round(plantCount * 0.65);
+        int otherPlantCount = plantCount - equatorPlantCount;
         addPlantsToRegion(equatorPlantCount, equatorStart, equatorEnd);
-
-        // Dodaj rośliny poza równikiem
         addPlantsToNonEquatorRegions(otherPlantCount);
     }
 
@@ -74,17 +69,14 @@ public class PlantCreatorEquator extends AbstractPlantCreator {
                 }
             }
         }
-
         placePlantsRandomly(plantCount, possiblePositions);
     }
 
     private void placePlantsRandomly(int plantCount, List<Vector2d> positions) {
         int addedPlants = 0;
-
         while (addedPlants < plantCount && !positions.isEmpty()) {
             int randomIndex = random.nextInt(positions.size());
             Vector2d position = positions.remove(randomIndex);
-
             Plant plant = createPlant(position);
             map.addPlant(position, plant);
             addedPlants++;

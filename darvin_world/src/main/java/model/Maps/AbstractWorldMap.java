@@ -114,8 +114,6 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
         notifyObservers("Dead animals removed from the map");
     }
 
-
-
     @Override
     public void addPlant(Vector2d position, Plant plant) {
         plants.put(position, plant);
