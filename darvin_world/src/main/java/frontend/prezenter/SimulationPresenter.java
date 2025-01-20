@@ -149,9 +149,6 @@ public class SimulationPresenter {
     }
 
 
-
-
-
     private void drawMap() {
         if (map == null) return;
         GraphicsContext gc = mapCanvas.getGraphicsContext2D();
@@ -235,5 +232,10 @@ public class SimulationPresenter {
 //            gc.setFill(Color.MAGENTA);
 //            gc.fillRect(x, y, cellWidth, cellHeight);
 //        });
+    }
+
+    public void showPreferableRegion() {
+
+
     }
 }

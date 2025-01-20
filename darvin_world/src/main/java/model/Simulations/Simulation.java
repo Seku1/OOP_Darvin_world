@@ -135,14 +135,6 @@ public class Simulation implements Runnable {
     }
 
     public double getAverageChildCount(){
-        return (double) 2 * childCount/(startingAnimalCount+childCount);
-    }
-
-    public int getStartingPlantCount() {
-        return startingPlantCount;
-    }
-
-    public int getStartingAnimalCount() {
-        return startingAnimalCount;
+        return (double) 2 * childCount/(startingAnimalCount + childCount);
     }
 }

@@ -30,4 +30,5 @@ public interface WorldMap {
     List<Animal> getAnimalsAtPosition(Vector2d position);
     boolean isPlantAt(Vector2d position);
     Plant getPlantAt(Vector2d position);
+    List<Plant> getPlants();
 }

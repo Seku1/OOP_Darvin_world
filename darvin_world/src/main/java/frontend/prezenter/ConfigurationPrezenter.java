@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 import static java.util.Objects.nonNull;
 
 public class ConfigurationPrezenter {
+    @FXML
+    private CheckBox czyCSV;
     private int height = 600;
     private int width = 800;
     @FXML
@@ -90,6 +93,7 @@ public class ConfigurationPrezenter {
             maxMutationsField.setText(reader.readLine());
             genomeLengthField.setText(reader.readLine());
             behaviorVariantBox.setValue(reader.readLine());
+            czyCSV.setSelected(Boolean.parseBoolean(reader.readLine()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,6 +119,7 @@ public class ConfigurationPrezenter {
             writer.write(maxMutationsField.getText() + "\n");
             writer.write(genomeLengthField.getText() + "\n");
             writer.write(behaviorVariantBox.getValue() + "\n");
+            writer.write(czyCSV.isSelected() + "\n");
             showAlert("Informacja", "Zapisano konfiguracje: " + fileName);
         } catch (IOException e) {
             e.printStackTrace();

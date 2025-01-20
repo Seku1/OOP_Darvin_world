@@ -57,6 +57,7 @@
         <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10;">
             <Button fx:id="pausePlayButton" text="Pauza" onAction="#handlePausePlayAction"/>
             <Button fx:id="additionalButton" text="Pokaż zwierzęta z najpopularniejszym genomem" visible="false" onAction="#handleAdditionalButtonAction"/>
+            <Button fx:id="showPreferableRegionButton" text="Pokaż najlepsze miejsca dla wzrostu roślin" visible="false" onAction="#showPreferableRegion"/>
         </VBox>
     </bottom>
 </BorderPane>
