@@ -91,7 +91,7 @@ public class Simulation implements Runnable {
 
     private void moveAnimals() {
         for (Animal animal : map.getAnimals()) {
-            map.move(animal, animal.getDirection());
+            map.move(animal);
         }
     }
 

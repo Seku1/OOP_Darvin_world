@@ -12,10 +12,14 @@ public class GlobeMap extends AbstractWorldMap {
     }
 
     @Override
-    public void move(Animal animal, MapDirection direction) {
-        Vector2d oldPosition = animal.getPosition();
-        animal.setNewDirection(animal.getActiveGenom());
-        Vector2d newPosition = oldPosition.addOnTheGlobe(direction.toUnitVector(), width + 1);
-        moveHelper(animal, direction, oldPosition, newPosition);
+    public Vector2d newPosition(Vector2d position, Vector2d movement) {
+        int x = (position.getX() + movement.getX())%width;
+        int y = (position.getY() + movement.getY())%height;
+        return new Vector2d(x, y);
+    }
+
+    @Override
+    public boolean canMoveTo(Vector2d position) {
+        return position.followsOnTheGlobe(this.lowerLeft) && position.precedesOnTheGlobe(this.upperRight);
     }
 }

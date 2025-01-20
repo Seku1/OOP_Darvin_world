@@ -24,6 +24,7 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     protected final List<MapChangeListener> observers = new ArrayList<>();
     protected final Map<Vector2d, ArrayList<Animal>> animals = new HashMap<>();
     protected final Map<Vector2d, Plant> plants = new HashMap<>();
+    protected final 
 
     public AbstractWorldMap(int height, int width, int cost) {
         this.upperRight = new Vector2d(width, height);
@@ -132,18 +133,25 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     }
 
     @Override
-    public void move(Animal animal, MapDirection direction) {
+    public void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
         animal.setNewDirection(animal.getActiveGenom());
-        Vector2d newPosition = newPosition(oldPosition.add(direction.toUnitVector()));
-        moveHelper(animal, direction, oldPosition, newPosition);
+        MapDirection direction = animal.getDirection();
+        Vector2d newPosition = newPosition(oldPosition,direction.toUnitVector());
+        if (canMoveTo(newPosition)) {
+            if (animal.getEnergyLevel() - cost >= 0) {
+                moveHelper(animal, direction, oldPosition, newPosition);
+            } else {
+                animal.setEnergyLevel(0);
+            }
+        }
     }
 
 
     @Override
-    public Vector2d newPosition(Vector2d position) {
-        int x = (position.getX() + width + 1) % (width + 1);
-        int y = (position.getY() + height + 1) % (height + 1);
+    public Vector2d newPosition(Vector2d position, Vector2d movement) {
+        int x = position.getX() + movement.getX();
+        int y = position.getY() + movement.getY();
         return new Vector2d(x, y);
     }
 

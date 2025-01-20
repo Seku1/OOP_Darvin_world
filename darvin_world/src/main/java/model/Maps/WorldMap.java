@@ -12,7 +12,7 @@ import java.util.*;
 
 public interface WorldMap {
     boolean place(Animal animal) throws IncorrectPositionException;
-    void move(Animal animal, MapDirection direction);
+    void move(Animal animal);
     boolean isOccupied(Vector2d position);
     Optional<MapElement> objectAt(Vector2d position);
     List<MapElement> getElements();
