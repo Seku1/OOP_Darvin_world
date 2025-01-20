@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 import static java.util.Objects.nonNull;
 
 public class ConfigurationPrezenter {
+    @FXML
+    public CheckBox ifSaveCSV;
     private int height = 600;
     private int width = 800;
     @FXML
@@ -90,6 +93,7 @@ public class ConfigurationPrezenter {
             maxMutationsField.setText(reader.readLine());
             genomeLengthField.setText(reader.readLine());
             behaviorVariantBox.setValue(reader.readLine());
+            ifSaveCSV.setSelected(Boolean.parseBoolean(reader.readLine()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,6 +119,7 @@ public class ConfigurationPrezenter {
             writer.write(maxMutationsField.getText() + "\n");
             writer.write(genomeLengthField.getText() + "\n");
             writer.write(behaviorVariantBox.getValue() + "\n");
+            writer.write(ifSaveCSV.isSelected() + "\n"); // Dodanie stanu CheckBoxa
             showAlert("Informacja", "Zapisano konfiguracje: " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
@@ -188,6 +193,7 @@ public class ConfigurationPrezenter {
             int dailyPlantGrowth = Integer.parseInt(dailyPlantGrowthField.getText());
             int maxMutations = Integer.parseInt(maxMutationsField.getText());
             int minMutations = Integer.parseInt(minMutationsField.getText());
+            boolean saveCSV = ifSaveCSV.isSelected();
 
             if (width * height < startingAnimalCount || height * width < startingPlantCount) {
                 showAlert("Błąd", "Większa startowa liczba zwierząt/roślin niż wielkość planszy!!!");
@@ -219,12 +225,14 @@ public class ConfigurationPrezenter {
             Simulation simulation = new Simulation(
                     map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant, dailyPlantGrowth
             );
-
+            if (saveCSV) {
+                map.addObserver(new CSV);
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation_config.fxml"));
             Parent simulationRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            presenter.setSimulation(simulation, map);
+            presenter.setSimulation(simulation, map, plantCreator);
 
             Stage stage = new Stage();
             stage.setTitle("Symulacja");

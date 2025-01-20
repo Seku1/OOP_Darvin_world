@@ -37,6 +37,10 @@
             <Label text="Liczba roślin wyrastających dziennie:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
             <TextField fx:id="dailyPlantGrowthField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
+            <Label text="Zapis do CSV" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <CheckBox fx:id="ifSaveCSV" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+
             <!-- Kolumna 2 -->
             <Label text="Startowa liczba zwierząt:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
             <TextField fx:id="initialAnimalCountField" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
