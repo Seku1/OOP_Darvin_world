@@ -16,7 +16,6 @@ public abstract class Animal implements MapElement {
     private int activeGenom;
     private int eatenPlants = 0;
     private int children = 0;
-    private int descendant = 0;
     private int livedDays = 0;
     private int dayOfDeath;
     private boolean dead = false;
@@ -88,9 +87,6 @@ public abstract class Animal implements MapElement {
         return this.children;
     }
 
-    public int getDescendant() {
-        return this.descendant;
-    }
 
     public int getLiveDays() {
         return this.livedDays;
@@ -123,6 +119,7 @@ public abstract class Animal implements MapElement {
 
     public void move(MapDirection direction, AbstractWorldMap map) {
         Vector2d potential_new_position = this.position.add(this.direction.toUnitVector());
+        this.livedDays ++;
         if(map.canMoveTo(potential_new_position)) {
             position = potential_new_position;
         }

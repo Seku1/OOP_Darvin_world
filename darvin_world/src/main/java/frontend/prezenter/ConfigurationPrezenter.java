@@ -225,7 +225,9 @@ public class ConfigurationPrezenter {
             Simulation simulation = new Simulation(
                     map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant, dailyPlantGrowth
             );
-
+            if (saveCSV) {
+                map.addObserver(new CSV);
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation_config.fxml"));
             Parent simulationRoot = loader.load();
 

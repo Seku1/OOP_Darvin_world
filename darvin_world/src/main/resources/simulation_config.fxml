@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.prezenter.SimulationPresenter" minHeight="700">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.prezenter.SimulationPresenter" minHeight="700" minWidth="500">
     <top>
         <Label fx:id="dayLabel" text="Dzień: 0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;"/>
     </top>
@@ -46,7 +46,6 @@
                 <Label fx:id="animalActiveGenomeLabel" text="Aktywny Genome: -" style="-fx-font-size: 14px;"/>
                 <Label fx:id="howMuchEatenLabel" text="Ile roślin zjedzone: -" style="-fx-font-size: 14px;"/>
                 <Label fx:id="animalChildCountLabel" text="Liczba Potomków: -" style="-fx-font-size: 14px;"/>
-                <Label fx:id="animalDescendantCountLabel" text="Liczba Potomków: -" style="-fx-font-size: 14px;"/>
                 <Label fx:id="animalAgeLabel" text="Wiek: -" style="-fx-font-size: 14px;"/>
                 <Label fx:id="livesLabel" text="Stan: -" style="-fx-font-size: 14px;"/>
             </VBox>
