@@ -27,6 +27,7 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     protected final Map<Vector2d, ArrayList<Animal>> animals = new HashMap<>();
     protected final Map<Vector2d, Plant> plants = new HashMap<>();
     protected Map<int[], Integer> most_popular_genomes = new HashMap<>();
+    protected ArrayList<Animal> deadAnimals = new ArrayList<>();
 
     public AbstractWorldMap(int height, int width, int cost) {
         this.upperRight = new Vector2d(width, height);
@@ -117,13 +118,15 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     }
 
     @Override
-    public void removeDeadAnimals() {
+    public void removeDeadAnimals(int day) {
         List<Vector2d> positionsToRemove = new ArrayList<>();
         for (Map.Entry<Vector2d, ArrayList<Animal>> entry : animals.entrySet()) {
             Vector2d position = entry.getKey();
             ArrayList<Animal> animalList = entry.getValue();
             for (int i = animalList.size() - 1; i >= 0; i--) {
                 if (animalList.get(i).getEnergyLevel() <= 0) {
+                    animalList.get(i).setDayOfDeath(day-1);
+                    deadAnimals.add(animalList.get(i));
                     animalList.remove(i);
                 } else {
                     break;
@@ -194,7 +197,6 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
             }
         }
     }
-
 
     @Override
     public Vector2d newPosition(Vector2d position, Vector2d movement) {
@@ -310,4 +312,12 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     public double getAverageEnergyLevel() {
         return getAnimals().stream().mapToDouble(Animal::getEnergyLevel).average().orElse(0.0);
     }
+
+    public double getAverageLifeSpanOfDeadAnimals() {
+        return deadAnimals.stream()
+                .mapToInt(Animal::getLiveDays)
+                .average()
+                .orElse(0.0);
+    }
+
 }

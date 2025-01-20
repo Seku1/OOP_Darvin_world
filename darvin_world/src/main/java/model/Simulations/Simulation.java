@@ -81,7 +81,7 @@ public class Simulation implements Runnable {
 
     private void runDay() {
         synchronized (map) {
-            map.removeDeadAnimals();
+            map.removeDeadAnimals(getDayNumber());
             moveAnimals();
             map.mutateAnimals();
             map.setMostPopularGenomes();
