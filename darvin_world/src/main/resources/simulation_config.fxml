@@ -9,21 +9,17 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.prezenter.SimulationPresenter">
-    <!-- Nagłówek z numerem dnia -->
     <top>
         <Label fx:id="dayLabel" text="Dzień: 0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;"/>
     </top>
 
-    <!-- Główna część aplikacji z mapą -->
     <center>
-        <Canvas fx:id="mapCanvas" width="600.0" height="400.0" />
+        <Canvas fx:id="mapCanvas" width="600.0" height="300.0" />
     </center>
 
-    <!-- Prawy panel z wykresem i statystykami -->
     <right>
         <VBox spacing="10.0" style="-fx-padding: 10; -fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5;">
-            <!-- Wykres -->
-            <LineChart fx:id="lineChart" prefHeight="300.0" prefWidth="400.0">
+            <LineChart fx:id="lineChart" prefHeight="200.0" prefWidth="400.0">
                 <xAxis>
                     <NumberAxis fx:id="xAxis" label="Czas"/>
                 </xAxis>
@@ -32,8 +28,8 @@
                 </yAxis>
             </LineChart>
 
-            <!-- Statystyki -->
-            <VBox spacing="5.0">
+            <VBox spacing="5.0" style="-fx-padding: 10; -fx-background-color: #e8e8e8; -fx-border-color: #bbbbbb; -fx-border-width: 1; -fx-border-radius: 5;">
+                <Label text="Statystyki mapy" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
                 <Label fx:id="animalCountLabel" text="Liczba zwierząt: 0" style="-fx-font-size: 14px;"/>
                 <Label fx:id="plantCountLabel" text="Liczba roślin: 0" style="-fx-font-size: 14px;"/>
                 <Label fx:id="emptyCountLabel" text="Liczba wolnych pól to: 0" style="-fx-font-size: 14px;"/>
@@ -42,13 +38,25 @@
                 <Label fx:id="averageLifespanLabel" text="Przewidywana długość życia: 0" style="-fx-font-size: 14px;"/>
                 <Label fx:id="averageChildCount" text="Średnia liczba dzieci: 0" style="-fx-font-size: 14px;"/>
             </VBox>
+
+            <VBox spacing="5.0" style="-fx-padding: 10; -fx-background-color: #e8e8e8; -fx-border-color: #bbbbbb; -fx-border-width: 1; -fx-border-radius: 5;">
+                <Label text="Statystyki zwierzęcia" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Label fx:id="animalGenomeLabel" text="Genom: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="animalActiveGenomeLabel" text="Aktywny Genome: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="howMuchEatenLabel" text="Ile roślin zjedzone: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="animalChildCountLabel" text="Liczba Potomków: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="animalDescendantCountLabel" text="Liczba Potomków: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="animalAgeLabel" text="Wiek: -" style="-fx-font-size: 14px;"/>
+                <Label fx:id="livesLabel" text="Stan: -" style="-fx-font-size: 14px;"/>
+
+            </VBox>
         </VBox>
     </right>
 
-    <!-- Przyciski sterujące -->
     <bottom>
         <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10;">
             <Button fx:id="pausePlayButton" text="Pauza" onAction="#handlePausePlayAction"/>
+            <Button fx:id="additionalButton" text="Pokaż zwierzęta z najpopularniejszym genomem" visible="false" onAction="#handleAdditionalButtonAction"/>
         </VBox>
     </bottom>
 </BorderPane>

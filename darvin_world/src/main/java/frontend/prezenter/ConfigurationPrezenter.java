@@ -44,6 +44,15 @@ public class ConfigurationPrezenter {
         loadAvailableConfigurations();
         loadBehaviorVariantBox();
         loadMapVariantBox();
+
+        loadDefaultConfiguration();
+    }
+
+    private void loadDefaultConfiguration() {
+        if (!configurationComboBox.getItems().isEmpty()) {
+            configurationComboBox.setValue(configurationComboBox.getItems().get(0));
+            loadConfigurationFromFile();
+        }
     }
 
     private void loadAvailableConfigurations() {
@@ -92,7 +101,6 @@ public class ConfigurationPrezenter {
         Path filePath = Paths.get(CONFIG_DIR, fileName);
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-            // Zapisanie wszystkich danych do pliku
             writer.write(heightField.getText() + "\n");
             writer.write(widthField.getText() + "\n");
             writer.write(mapVariantBox.getValue() + "\n");
@@ -112,7 +120,7 @@ public class ConfigurationPrezenter {
             e.printStackTrace();
         }
 
-        loadAvailableConfigurations(); // Refresh ComboBox
+        loadAvailableConfigurations();
     }
 
     @FXML

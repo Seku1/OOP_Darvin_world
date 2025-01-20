@@ -16,8 +16,9 @@ import model.Maps.AbstractWorldMap;
 import model.Others.Vector2d;
 import model.Simulations.Simulation;
 
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 public class SimulationPresenter {
@@ -25,7 +26,9 @@ public class SimulationPresenter {
     public Button pausePlayButton;
     @FXML
     public Label dayLabel, animalCountLabel, plantCountLabel, averageLifespanLabel, mostFrequentGenome, emptyCountLabel,
-            averageEnergyLevel, averageChildCount;
+            averageEnergyLevel, averageChildCount, animalGenomeLabel, animalActiveGenomeLabel, howMuchEatenLabel,
+            animalChildCountLabel, animalAgeLabel, livesLabel, animalDescendantCountLabel;
+    public Button additionalButton;
     @FXML
     private LineChart<Number, Number> lineChart;
     @FXML
@@ -89,14 +92,37 @@ public class SimulationPresenter {
                 xAxis.setUpperBound(dayNumber);
                 rescaleYAxis();
             }
-
-            dayLabel.setText("Dzień: " + simulation.getDayNumber());
-            animalCountLabel.setText("Liczba zwierząt : " + map.getAnimals().size());
-            plantCountLabel.setText("Liczba rolin : " + map.getPlants().size());
-            emptyCountLabel.setText("Liczba wolnych pól to: " + Math.max(map.getWidth() * map.getHight() - map.getOccupiedPositions().size(), 0));
-            averageEnergyLevel.setText("Średnii poziom energi zwierzaków: " + map.getAverageEnergyLevel());
-            averageChildCount.setText("Średnia ilość dzieci to: " + simulation.getAverageChildCount());
+            updateMapStats();
+            if (followedAnimal != null) {
+                updateAnimalStats(followedAnimal);
+            }
         });
+    }
+
+    private void updateAnimalStats(Animal animal) {
+        animalGenomeLabel.setText("Genom: " + formatGenes(animal.getGenes()));
+        animalActiveGenomeLabel.setText("Aktywny gen: " + animal.getActiveGenom());
+        howMuchEatenLabel.setText("Liczba zjedzonych roślin: " + animal.getEatenPlants());
+        averageEnergyLevel.setText("Ilość dzieci: " + animal.getChildren());
+        animalDescendantCountLabel.setText("Ilość potomstwa" + animal.getDescendant());
+        animalAgeLabel.setText("Wiek zwierzaka: " + animal.getLiveDays());
+        livesLabel.setText("Status życia: " + (animal.isDead()? "Martwy": "Żywy"));
+    }
+
+    private String formatGenes(int[] genes) {
+        return Arrays.stream(genes)
+                .limit(5)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(", ", "[", genes.length > 5 ? " ...]" : "]"));
+    }
+
+    private void updateMapStats(){
+        dayLabel.setText("Dzień: " + simulation.getDayNumber());
+        animalCountLabel.setText("Liczba zwierząt : " + map.getAnimals().size());
+        plantCountLabel.setText("Liczba rolin : " + map.getPlants().size());
+        emptyCountLabel.setText("Liczba wolnych pól to: " + Math.max(map.getWidth() * map.getHight() - map.getOccupiedPositions().size(), 0));
+        averageEnergyLevel.setText("Średnii poziom energi zwierzaków: " + map.getAverageEnergyLevel());
+        averageChildCount.setText("Średnia ilość dzieci to: " + simulation.getAverageChildCount());
     }
 
     private void rescaleYAxis() {
@@ -159,6 +185,7 @@ public class SimulationPresenter {
                 Animal animal = map.getAnimalsAtPosition(clickedPosition).getFirst();
                 if (animal != null) {
                     followedAnimal = animal;
+                    updateAnimalStats(animal);
                 }
             });
         }
@@ -182,10 +209,31 @@ public class SimulationPresenter {
             if (simulation.getRunning()) {
                 simulation.pause();
                 pausePlayButton.setText("Wznów");
+                additionalButton.setVisible(true);
             } else {
                 simulation.play();
                 pausePlayButton.setText("Pauza");
+                additionalButton.setVisible(false);
             }
         }
+    }
+
+
+    public void handleAdditionalButtonAction() {
+//        GraphicsContext gc = mapCanvas.getGraphicsContext2D();
+//
+//        double cellWidth = mapCanvas.getWidth() / (map.getWidth() + 1);
+//        double cellHeight = mapCanvas.getHeight() / (map.getHight() + 1);
+//        map.getAnimalPositions().forEach(position -> {
+//            Animal animal = map.getAnimalsAtPosition(position).stream()
+//                    .filter(animal1 -> animal1.getGenes() == map.getMostFrequentGenome())
+//                    .toList().getFirst();
+//            gc.setFill(getColor(animal));
+//            double x = position.getX() * cellWidth;
+//            double y = position.getY() * cellHeight;
+//            gc.fillOval(x, y, cellWidth, cellHeight);
+//            gc.setFill(Color.MAGENTA);
+//            gc.fillRect(x, y, cellWidth, cellHeight);
+//        });
     }
 }
