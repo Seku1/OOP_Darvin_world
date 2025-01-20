@@ -24,13 +24,38 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
     protected final List<MapChangeListener> observers = new ArrayList<>();
     protected final Map<Vector2d, ArrayList<Animal>> animals = new HashMap<>();
     protected final Map<Vector2d, Plant> plants = new HashMap<>();
-    protected final 
+    protected Map<int[], Integer> most_popular_genomes = new HashMap<>();
 
     public AbstractWorldMap(int height, int width, int cost) {
         this.upperRight = new Vector2d(width, height);
         this.height = height;
         this.width = width;
         this.cost = cost;
+    }
+
+    public Map<int[], Integer> findMostPopularGenomes() {
+        Map<String, Integer> genomeCountMap = new HashMap<>();
+        for (ArrayList<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                String genomeKey = Arrays.toString(animal.getGenes());
+                genomeCountMap.put(genomeKey, genomeCountMap.getOrDefault(genomeKey, 0) + 1);
+            }
+        }
+        int maxCount = genomeCountMap.values().stream().max(Integer::compare).orElse(0);
+        Map<int[], Integer> mostPopularGenomes = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : genomeCountMap.entrySet()) {
+            if (entry.getValue() == maxCount) {
+                int[] genomeArray = Arrays.stream(entry.getKey().substring(1, entry.getKey().length() - 1).split(", "))
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
+                mostPopularGenomes.put(genomeArray, maxCount);
+            }
+        }
+        return mostPopularGenomes;
+    }
+
+    public void setMostPopularGenomes() {
+        this.most_popular_genomes = findMostPopularGenomes();
     }
 
     public AbstractWorldMap(int height, int width) {
