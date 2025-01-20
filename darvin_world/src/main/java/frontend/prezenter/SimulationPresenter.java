@@ -18,6 +18,7 @@ import model.Simulations.Simulation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -53,7 +54,7 @@ public class SimulationPresenter {
         lineChart.setAnimated(false);
 
         xAxis.setAutoRanging(false);
-        xAxis.setLowerBound(0);
+        xAxis.setLowerBound(1);
         xAxis.setUpperBound(MAX_DAYS_DISPLAYED);
         yAxis.setAutoRanging(true);
     }
@@ -85,11 +86,15 @@ public class SimulationPresenter {
             plantSeries.getData().add(new XYChart.Data<>(dayNumber, plantCount));
 
             if (dayNumber > MAX_DAYS_DISPLAYED) {
-                animalSeries.getData().removeFirst();
-                plantSeries.getData().removeFirst();
-
+                if (animalSeries.getData().size() > 10) {
+                    animalSeries.getData().remove(0);
+                }
+                if (plantSeries.getData().size() > 10) {
+                    plantSeries.getData().remove(0);
+                }
                 xAxis.setLowerBound(dayNumber + 1 - MAX_DAYS_DISPLAYED);
                 xAxis.setUpperBound(dayNumber);
+
                 rescaleYAxis();
             }
             updateMapStats();
@@ -119,11 +124,25 @@ public class SimulationPresenter {
     private void updateMapStats(){
         dayLabel.setText("Dzień: " + simulation.getDayNumber());
         animalCountLabel.setText("Liczba zwierząt : " + map.getAnimals().size());
-        plantCountLabel.setText("Liczba rolin : " + map.getPlants().size());
+        plantCountLabel.setText("Liczba roślin : " + map.getPlants().size());
         emptyCountLabel.setText("Liczba wolnych pól to: " + Math.max(map.getWidth() * map.getHight() - map.getOccupiedPositions().size(), 0));
+        updateMostPopularGenomeStats();
         averageEnergyLevel.setText("Średnii poziom energi zwierzaków: " + map.getAverageEnergyLevel());
         averageChildCount.setText("Średnia ilość dzieci to: " + simulation.getAverageChildCount());
     }
+
+    private void updateMostPopularGenomeStats() {
+        Map<int[], Integer> mostPopularGenomes = map.findMostPopularGenomes();
+        if (!mostPopularGenomes.isEmpty()) {
+            int[] popularGenome = mostPopularGenomes.keySet().iterator().next();  // Sprawdź, czy mapa nie jest pusta
+            int count = mostPopularGenomes.get(popularGenome);
+            mostFrequentGenome.setText("Najczęściej występujące geny: " + Arrays.toString(popularGenome) +
+                    " (liczba zwierząt: " + count + ")");
+        } else {
+            mostFrequentGenome.setText("Najczęściej występujące geny: brak danych");
+        }
+    }
+
 
     private void rescaleYAxis() {
         List<XYChart.Data<Number, Number>> animalData = animalSeries.getData();
@@ -220,20 +239,39 @@ public class SimulationPresenter {
 
 
     public void handleAdditionalButtonAction() {
-//        GraphicsContext gc = mapCanvas.getGraphicsContext2D();
-//
-//        double cellWidth = mapCanvas.getWidth() / (map.getWidth() + 1);
-//        double cellHeight = mapCanvas.getHeight() / (map.getHight() + 1);
-//        map.getAnimalPositions().forEach(position -> {
-//            Animal animal = map.getAnimalsAtPosition(position).stream()
-//                    .filter(animal1 -> animal1.getGenes() == map.getMostFrequentGenome())
-//                    .toList().getFirst();
-//            gc.setFill(getColor(animal));
-//            double x = position.getX() * cellWidth;
-//            double y = position.getY() * cellHeight;
-//            gc.fillOval(x, y, cellWidth, cellHeight);
-//            gc.setFill(Color.MAGENTA);
-//            gc.fillRect(x, y, cellWidth, cellHeight);
-//        });
+        GraphicsContext gc = mapCanvas.getGraphicsContext2D();
+
+        double cellWidth = mapCanvas.getWidth() / (map.getWidth() + 1);
+        double cellHeight = mapCanvas.getHeight() / (map.getHight() + 1);
+
+        Map<int[], Integer> mostFrequentGenomes = map.findMostPopularGenomes();
+
+        if (mostFrequentGenomes != null && !mostFrequentGenomes.isEmpty()) {
+            map.getAnimalPositions().forEach(position -> {
+                List<Animal> animalsAtPosition = map.getAnimalsAtPosition(position);
+
+                animalsAtPosition.forEach(animal -> {
+                    int[] animalGenome = animal.getGenes();
+                    mostFrequentGenomes.forEach((genome, count) -> {
+                        if (Arrays.equals(animalGenome, genome)) {
+                            double x = position.getX() * cellWidth;
+                            double y = position.getY() * cellHeight;
+
+
+                            gc.setFill(Color.MAGENTA);
+                            gc.fillRect(x, y, cellWidth, cellHeight);
+
+                            gc.setFill(getColor(animal));
+                            gc.fillOval(x, y, cellWidth, cellHeight);
+                        }
+                    });
+                });
+            });
+        } else {
+            System.out.println("Brak zwierząt z najczęściej występującymi genami.");
+        }
     }
+
+    
+
 }
