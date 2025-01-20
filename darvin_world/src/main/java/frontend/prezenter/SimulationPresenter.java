@@ -8,8 +8,11 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
+import model.MapElements.Animal.Animal;
 import model.Maps.AbstractWorldMap;
 import model.Simulations.Simulation;
+
+import java.util.ArrayList;
 
 public class SimulationPresenter {
     @FXML
@@ -52,15 +55,12 @@ public class SimulationPresenter {
     private void startSimulation() {
         if (simulation != null) {
             simulationThread = new Thread(simulation);
-            simulation.setThreadSleep(10);
             simulationThread.setDaemon(true);
             simulationThread.start();
         }
     }
 
     private void updateView() {
-        simulationStep++;
-
         // Wywołaj aktualizację widoku w wątku JavaFX
         Platform.runLater(() -> {
             // Aktualizacja mapy
@@ -70,15 +70,14 @@ public class SimulationPresenter {
             int animalCount = map.getAnimals().size();
             int plantCount = map.getPlantMap().size();
 
-            animalSeries.getData().add(new XYChart.Data<>(simulationStep, animalCount));
-            plantSeries.getData().add(new XYChart.Data<>(simulationStep, plantCount));
+            animalSeries.getData().add(new XYChart.Data<>(simulation.getDayNumber(), animalCount));
+            plantSeries.getData().add(new XYChart.Data<>(simulation.getDayNumber(), plantCount));
 
         });
     }
 
     private void drawMap() {
         if (map == null) return;
-
         GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 
         // Wyczyszczenie mapy
@@ -87,25 +86,24 @@ public class SimulationPresenter {
         // Ustal rozmiar jednej komórki w zależności od wielkości mapy
         double cellWidth = mapCanvas.getWidth() / (map.getWidth() + 1);
         double cellHeight = mapCanvas.getHeight() / (map.getHight() + 1);
+        synchronized (map) {
+            // Rysowanie roślin
+            gc.setFill(Color.GREEN);
+            map.getPlantMap().forEach((position, plant) -> {
+                double x = position.getX() * cellWidth;
+                double y = position.getY() * cellHeight;
+                gc.fillRect(x, y, cellWidth, cellHeight);
+            });
 
-        // Rysowanie roślin
-        gc.setFill(Color.GREEN);
-        map.getPlantMap().forEach((position, plant) -> {
-            double x = position.getX() * cellWidth;
-            double y = position.getY() * cellHeight;
-            gc.fillRect(x, y, cellWidth, cellHeight);
-        });
+            // Rysowanie zwierząt
+            gc.setFill(Color.RED);
+            map.getAnimalPositions().forEach(position -> {
+                double x = position.getX() * cellWidth;
+                double y = position.getY() * cellHeight;
+                gc.fillOval(x, y, cellWidth, cellHeight);
+            });
+        }
 
-        // Rysowanie zwierząt
-        gc.setFill(Color.RED);
-        map.getAnimalPositions().forEach(position -> {
-            double x = position.getX() * cellWidth;
-            double y = position.getY() * cellHeight;
-            gc.fillOval(x, y, cellWidth, cellHeight);
-        });
-
-        // Logowanie dla sprawdzenia, czy rysowanie działa
-        System.out.println("Map drawn at step: " + simulationStep);
     }
 
 }

@@ -239,4 +239,7 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
         return plants.get(position);
     }
 
+    public List<Plant> getPlants() {
+        return new ArrayList<>(plants.values());
+    }
 }

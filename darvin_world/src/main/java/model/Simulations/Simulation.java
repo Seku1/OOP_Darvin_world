@@ -58,6 +58,7 @@ public class Simulation implements Runnable {
                 dayNumber++;
                 runDay();
                 map.notifyObservers("Day " + dayNumber);
+                System.out.println("Day " + dayNumber);
             }
         } catch (InterruptedException exception) {
             exception.printStackTrace();
@@ -65,11 +66,13 @@ public class Simulation implements Runnable {
     }
 
     private void runDay() {
-        map.removeDeadAnimals();
-        moveAnimals();
-        feedAnimals();
-        breedAnimals();
-        plantCreator.addPlantsDaily(5);
+        synchronized (map) {
+            map.removeDeadAnimals();
+            moveAnimals();
+            feedAnimals();
+            breedAnimals();
+            plantCreator.addPlantsDaily(100);
+        }
     }
 
     private void moveAnimals() {
@@ -106,5 +109,9 @@ public class Simulation implements Runnable {
                 }
             }
         });
+    }
+
+    public int getDayNumber() {
+        return dayNumber;
     }
 }
