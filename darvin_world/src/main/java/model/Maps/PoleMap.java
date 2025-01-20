@@ -19,13 +19,17 @@ public class PoleMap extends AbstractWorldMap {
     }
 
     @Override
-    public void move(Animal animal, MapDirection direction) {
-        super.move(animal, direction);
-        animal.setEnergyLevel(animal.getEnergyLevel() - calculateCost(animal.getPosition().getY()));
-    }
-
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return position.followsOnTheGlobe(this.lowerLeft) && position.precedesOnTheGlobe(this.upperRight);
+    public void move(Animal animal) {
+        Vector2d oldPosition = animal.getPosition();
+        animal.setNewDirection(animal.getActiveGenom());
+        MapDirection direction = animal.getDirection();
+        Vector2d newPosition = newPosition(oldPosition,direction.toUnitVector());
+        if (canMoveTo(newPosition)) {
+            if (animal.getEnergyLevel() - calculateCost(animal.getPosition().getY()) >= 0) {
+                moveHelper(animal, direction, oldPosition, newPosition);
+            } else {
+                animal.setEnergyLevel(0);
+            }
+        }
     }
 }
