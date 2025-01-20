@@ -17,7 +17,7 @@ public class StatsSaverCSV implements NewDayObserver {
         this.fileName = fileName;
         this.simulationCSV = new File(makeFullFileName(fileName));
         try (FileWriter writer = new FileWriter(simulationCSV, true)) {
-            writer.append("Day;Animal count;Grass Count;Free space;Most common genes;Average energy;Average lifespan;Average children count\n");
+            writer.append("Day;Animal count;Grass Count;Most common genes;Average energy;Average lifespan;Average children count\n");
         }
     }
 
