@@ -99,6 +99,10 @@ public abstract class Animal implements MapElement {
         return this.dayOfDeath;
     }
 
+    public void setDayOfDeath(int dayOfDeath) {
+        this.dayOfDeath = dayOfDeath;
+    }
+
     public int getActiveGenom() {
         return this.activeGenom;
     }
@@ -113,10 +117,6 @@ public abstract class Animal implements MapElement {
 
     public void addEnergy(int amount) {
         this.energyLevel += amount;
-    }
-
-    public boolean isDead() {
-        return this.energyLevel <= 0;
     }
 
     public void move(MapDirection direction, AbstractWorldMap map) {
