@@ -37,8 +37,7 @@ public class ConfigurationPrezenter {
     @FXML
     private TextField heightField, widthField, initialPlantCountField, plantEnergyField,
             dailyPlantGrowthField, initialAnimalCountField, initialAnimalEnergyField,
-            energyToReproduceField, energyForChildField, minMutationsField,
-            maxMutationsField, genomeLengthField;
+            energyToReproduceField, energyForChildField, genomeLengthField;
 
     private static final String CONFIG_DIR = "configurations";
 
@@ -89,8 +88,6 @@ public class ConfigurationPrezenter {
             initialAnimalEnergyField.setText(reader.readLine());
             energyToReproduceField.setText(reader.readLine());
             energyForChildField.setText(reader.readLine());
-            minMutationsField.setText(reader.readLine());
-            maxMutationsField.setText(reader.readLine());
             genomeLengthField.setText(reader.readLine());
             behaviorVariantBox.setValue(reader.readLine());
             ifSaveCSV.setSelected(Boolean.parseBoolean(reader.readLine()));
@@ -115,8 +112,6 @@ public class ConfigurationPrezenter {
             writer.write(initialAnimalEnergyField.getText() + "\n");
             writer.write(energyToReproduceField.getText() + "\n");
             writer.write(energyForChildField.getText() + "\n");
-            writer.write(minMutationsField.getText() + "\n");
-            writer.write(maxMutationsField.getText() + "\n");
             writer.write(genomeLengthField.getText() + "\n");
             writer.write(behaviorVariantBox.getValue() + "\n");
             writer.write(ifSaveCSV.isSelected() + "\n"); // Dodanie stanu CheckBoxa
@@ -191,16 +186,10 @@ public class ConfigurationPrezenter {
             int energyStarting = Integer.parseInt(initialAnimalEnergyField.getText());
             int genomeLength = Integer.parseInt(genomeLengthField.getText());
             int dailyPlantGrowth = Integer.parseInt(dailyPlantGrowthField.getText());
-            int maxMutations = Integer.parseInt(maxMutationsField.getText());
-            int minMutations = Integer.parseInt(minMutationsField.getText());
             boolean saveCSV = ifSaveCSV.isSelected();
 
             if (width * height < startingAnimalCount || height * width < startingPlantCount) {
                 showAlert("Błąd", "Większa startowa liczba zwierząt/roślin niż wielkość planszy!!!");
-                return;
-            }
-            if (genomeLength < 1 || genomeLength < maxMutations || minMutations > maxMutations) {
-                showAlert("Błąd", "Nieprawidłowe ustawienia genów");
                 return;
             }
 
@@ -225,9 +214,7 @@ public class ConfigurationPrezenter {
             Simulation simulation = new Simulation(
                     map, plantCreator, breeder, animalCreator, startingAnimalCount, startingPlantCount, energyPerPlant, dailyPlantGrowth
             );
-            if (saveCSV) {
-                map.addObserver(new CSV);
-            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation_config.fxml"));
             Parent simulationRoot = loader.load();
 
@@ -256,8 +243,6 @@ public class ConfigurationPrezenter {
                 nonNull(initialAnimalEnergyField.getText()) && !initialAnimalEnergyField.getText().trim().isEmpty() &&
                 nonNull(energyToReproduceField.getText()) && !energyToReproduceField.getText().trim().isEmpty() &&
                 nonNull(energyForChildField.getText()) && !energyForChildField.getText().trim().isEmpty() &&
-                nonNull(minMutationsField.getText()) && !minMutationsField.getText().trim().isEmpty() &&
-                nonNull(maxMutationsField.getText()) && !maxMutationsField.getText().trim().isEmpty() &&
                 nonNull(genomeLengthField.getText()) && !genomeLengthField.getText().trim().isEmpty() &&
                 nonNull(mapVariantBox.getValue()) &&
                 nonNull(behaviorVariantBox.getValue());

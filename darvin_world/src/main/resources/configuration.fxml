@@ -54,14 +54,8 @@
             <Label text="Energia rodziców dla potomka:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
             <TextField fx:id="energyForChildField" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
 
-            <Label text="Min. liczba mutacji:" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-            <TextField fx:id="minMutationsField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
-
-            <Label text="Max. liczba mutacji:" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-            <TextField fx:id="maxMutationsField" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-
-            <Label text="Długość genomu:" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
-            <TextField fx:id="genomeLengthField" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+            <Label text="Długość genomu:" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+            <TextField fx:id="genomeLengthField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
 
             <Label text="Wariant zachowania zwierząt:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
             <ComboBox fx:id="behaviorVariantBox" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
