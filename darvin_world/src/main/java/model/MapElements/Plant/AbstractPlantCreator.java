@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public abstract class AbstractPlantCreator implements PlantCreator {
     protected final AbstractWorldMap map;
-    protected final RandomPositionGenerator positionGenerator;  // Użycie protected, aby było dostępne w klasach dziedziczących
+    protected final RandomPositionGenerator positionGenerator;
 
     protected AbstractPlantCreator(AbstractWorldMap map) {
         this.map = map;
-        this.positionGenerator = new RandomPositionGenerator(map); // Inicjalizacja positionGenerator w konstruktorze
+        this.positionGenerator = new RandomPositionGenerator(map);
     }
 
     private void addPlants(int plantCount) {
@@ -20,11 +20,10 @@ public abstract class AbstractPlantCreator implements PlantCreator {
             if (position.isPresent()) {
                 Plant plant = createPlant(position.get());
                 map.addPlant(position.get(), plant);
-                positionGenerator.removePosition(position.get());  // Usuwamy pozycję po jej użyciu
+                positionGenerator.removePosition(position.get());
             } else {
-                break; // Jeśli Optional jest pusty, kończymy pętlę
+                break;
             }
-
         }
     }
 
