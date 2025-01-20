@@ -320,4 +320,10 @@ public abstract class AbstractWorldMap implements WorldMap, MoveValidator {
                 .orElse(0.0);
     }
 
+    public double getAverageNumberOfChildren() {
+        return getAnimals().stream()
+                .mapToInt(Animal::getChildren)
+                .average()
+                .orElse(0.0);
+    }
 }
