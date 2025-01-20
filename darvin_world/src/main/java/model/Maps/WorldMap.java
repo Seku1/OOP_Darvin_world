@@ -25,7 +25,7 @@ public interface WorldMap {
     List<Animal> getAnimals();
     Map<Vector2d, Plant> getPlantMap();
     int getHight();
-    void removeDeadAnimals();
+    void removeDeadAnimals(int day);
     List<Vector2d> getAnimalPositions();
     List<Animal> getAnimalsAtPosition(Vector2d position);
     boolean isPlantAt(Vector2d position);
