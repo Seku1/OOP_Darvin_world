@@ -4,8 +4,6 @@ import model.MapElements.Animal.Animal;
 import model.Others.MapDirection;
 import model.Others.Vector2d;
 
-import java.util.ArrayList;
-
 public class PoleMap extends AbstractWorldMap {
     private final float a;
 

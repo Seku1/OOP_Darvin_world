@@ -83,6 +83,7 @@ public class Simulation implements Runnable {
         synchronized (map) {
             map.removeDeadAnimals();
             moveAnimals();
+            map.setMostPopularGenomes();
             feedAnimals();
             breedAnimals();
             plantCreator.addPlantsDaily(this.dailyPlantGrowth);
