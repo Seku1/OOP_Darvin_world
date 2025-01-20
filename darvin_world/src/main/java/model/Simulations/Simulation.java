@@ -81,8 +81,10 @@ public class Simulation implements Runnable {
 
     private void runDay() {
         synchronized (map) {
-            map.removeDeadAnimals();
+            map.removeDeadAnimals(getDayNumber());
             moveAnimals();
+            map.mutateAnimals();
+            map.setMostPopularGenomes();
             feedAnimals();
             breedAnimals();
             plantCreator.addPlantsDaily(this.dailyPlantGrowth);
@@ -91,7 +93,7 @@ public class Simulation implements Runnable {
 
     private void moveAnimals() {
         for (Animal animal : map.getAnimals()) {
-            map.move(animal, animal.getDirection());
+            map.move(animal);
         }
     }
 

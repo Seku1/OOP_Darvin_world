@@ -1,4 +1,4 @@
-package model.Observers;
+package model.ObservationCSV;
 
 import java.io.IOException;
 
