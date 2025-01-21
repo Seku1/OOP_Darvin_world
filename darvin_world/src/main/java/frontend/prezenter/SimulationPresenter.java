@@ -113,7 +113,7 @@ public class SimulationPresenter {
         howMuchEatenLabel.setText("Liczba zjedzonych roślin: " + animal.getEatenPlants());
         averageEnergyLevel.setText("Ilość dzieci: " + animal.getChildren());
         animalAgeLabel.setText("Wiek zwierzaka: " + animal.getLiveDays());
-        livesLabel.setText("Status życia: " + (animal.isDead()? "Martwy" : "Żywy"));
+        livesLabel.setText("Status życia: " + (!animal.isDead()? "Martwy" : "Żywy"));
         }
     }
 

@@ -9,7 +9,7 @@ public class GlobeMap extends AbstractWorldMap {
 
     @Override
     public Vector2d newPosition(Vector2d position, Vector2d movement) {
-        int x = (position.getX() + movement.getX())%width;
+        int x = (position.getX() + movement.getX() + width + 1)%(width+1);
         int y = (position.getY() + movement.getY())%height;
         return new Vector2d(x, y);
     }

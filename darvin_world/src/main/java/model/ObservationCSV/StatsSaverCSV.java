@@ -1,20 +1,25 @@
 package model.ObservationCSV;
 
 import model.Maps.AbstractWorldMap;
+import model.Maps.WorldMap;
+import model.Others.MapChangeListener;
+import model.Simulations.Simulation;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.Arrays;
 
-public class StatsSaverCSV implements NewDayObserver {
+public class StatsSaverCSV implements MapChangeListener {
     private final String fileName;
     private final File simulationCSV;
     private final AbstractWorldMap map;
-
-    public StatsSaverCSV(String fileName, AbstractWorldMap map) throws IOException{
+    private final Simulation simulation;
+    public StatsSaverCSV(String fileName, AbstractWorldMap map, Simulation simulation) throws IOException{
         this.map = map;
         this.fileName = fileName;
+        this.simulation = simulation;
         this.simulationCSV = new File(makeFullFileName(fileName));
         try (FileWriter writer = new FileWriter(simulationCSV, true)) {
             writer.append("Day;Animal count;Grass Count;Most common genes;Average energy;Average lifespan;Average children count\n");
@@ -48,8 +53,13 @@ public class StatsSaverCSV implements NewDayObserver {
                 map.getAverageNumberOfChildren());
     }
 
+
     @Override
-    public void newDay(int day) throws IOException {
-        appendToCSV("Day " + day);
+    public void mapChanged(WorldMap worldMap, String message) {
+        try {
+            appendToCSV("Day: " + simulation.getDayNumber());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

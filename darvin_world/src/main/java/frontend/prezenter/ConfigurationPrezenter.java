@@ -17,6 +17,7 @@ import model.MapElements.Plant.PlantCreatorEquator;
 import model.Maps.AbstractWorldMap;
 import model.Maps.GlobeMap;
 import model.Maps.PoleMap;
+import model.ObservationCSV.StatsSaverCSV;
 import model.Simulations.Simulation;
 
 import java.io.*;
@@ -220,6 +221,10 @@ public class ConfigurationPrezenter {
 
             SimulationPresenter presenter = loader.getController();
             presenter.setSimulation(simulation, map, plantCreator);
+
+//            if (saveCSV) {
+//                map.addObserver(new StatsSaverCSV("sos", map, simulation));
+//            }
 
             Stage stage = new Stage();
             stage.setTitle("Symulacja");
